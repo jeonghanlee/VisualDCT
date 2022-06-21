@@ -1,8 +1,15 @@
 # Release Notes
 
-## 2.8.3 (not released yet)
-[View diff](https://github.com/epics-extensions/VisualDCT/compare/v2.8.2...master)
+## 2.8.4 (not released yet)
+[View diff](https://github.com/epics-extensions/VisualDCT/compare/v2.8.3...master)
 
+## 2.8.3 (21 Jun 2022)
+[View diff](https://github.com/epics-extensions/VisualDCT/compare/v2.8.2...v2.8.3)
+
+ * Security relevant update of mysql-connector version
+ * Update versions of all dependencies
+ * Move from Travis CI to GitHub Actions
+ 
 ## 2.8.2 (19 Dec 2019)
 [View diff](https://github.com/epics-extensions/VisualDCT/compare/v2.8.1...v2.8.2)
 
