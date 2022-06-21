@@ -1,4 +1,4 @@
-# VisualDCT (aka VDCT) [![Build Status](https://travis-ci.org/epics-extensions/VisualDCT.svg?branch=master)](https://travis-ci.org/epics-extensions/VisualDCT)
+# VisualDCT (aka VDCT) ![Build Status](https://github.com/epics-extensions/VisualDCT/actions/workflows/build.yml/badge.svg)
 
 VisualDCT is the Visual Database Configuration Tool for
 [EPICS](https://epics-controls.org/) Databases.
@@ -35,7 +35,7 @@ Apart from the default lifecycle, two additional Maven goals are useful:
 ## Continuous Integration
 
 Continuous Integration and deployment is provided through 
-[Travis-CI](https://travis-ci.org/epics-extensions/VisualDCT).
+[GitHub Actions](https://github.com/epics-extensions/VisualDCT/actions).
 
 ## Bugs
 

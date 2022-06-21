@@ -40,8 +40,8 @@
         <url>https://github.com/epics-extensions/VisualDCT/issues</url>
     </issueManagement>
     <ciManagement>
-        <system>Travis-CI</system>
-        <url>https://travis-ci.org/epics-extensions/VisualDCT</url>
+        <system>GitHub Actions</system>
+        <url>https://github.com/epics-extensions/VisualDCT/actions</url>
     </ciManagement>
 
     <groupId>com.cosylab.vdct</groupId>
