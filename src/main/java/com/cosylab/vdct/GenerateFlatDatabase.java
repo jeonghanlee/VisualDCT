@@ -175,8 +175,9 @@ public class GenerateFlatDatabase
 					}
 				}
 
-			// no break
-			case 1:
+				break;  // unreachable, but makes static code analysis happy
+
+                        case 1:
 				vdbFile = new File(args[i]);
 				state = 2;
 
