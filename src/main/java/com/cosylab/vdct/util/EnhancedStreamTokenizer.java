@@ -189,7 +189,7 @@ public class EnhancedStreamTokenizer {
 	commentChar('/');
 	quoteChar('"');
 	quoteChar('\'');
-	parseNumbers();
+	parseNumbers(true);
     }
 
     /**
@@ -377,9 +377,9 @@ public class EnhancedStreamTokenizer {
     }
 
     /**
-     * Specifies that numbers should be parsed by this tokenizer. The
-     * syntax table of this tokenizer is modified so that each of the twelve
-     * characters:
+     * Specifies if numbers should be parsed by this tokenizer. If flag is set
+     * true, the syntax table of this tokenizer is modified so that each of
+     * the twelve characters:
      * <blockquote><pre>
      *      0 1 2 3 4 5 6 7 8 9 . -
      * </pre></blockquote>
@@ -392,15 +392,26 @@ public class EnhancedStreamTokenizer {
      * field to the value <code>TT_NUMBER</code> and putting the numeric
      * value of the token into the <code>nval</code> field.
      *
+     * @param flag  true = enable / false = disable number parsing
      * @see     java.io.StreamTokenizer#nval
      * @see     java.io.StreamTokenizer#TT_NUMBER
      * @see     java.io.StreamTokenizer#ttype
      */
-    public void parseNumbers() {
-	for (int i = '0'; i <= '9'; i++)
-	    ctype[i] |= CT_DIGIT;
-	ctype['.'] |= CT_DIGIT;
-	ctype['-'] |= CT_DIGIT;
+    public void parseNumbers(boolean flag) {
+        if (flag) {
+            for (int i = '0'; i <= '9'; i++) {
+                ctype[i] |= CT_DIGIT;
+            }
+            ctype['.'] |= CT_DIGIT;
+            ctype['-'] |= CT_DIGIT;
+
+        } else {
+            for (int i = '0'; i <= '9'; i++) {
+                ctype[i] &= ~CT_DIGIT;
+            }
+            ctype['.'] &= ~CT_DIGIT;
+            ctype['-'] &= ~CT_DIGIT;
+        }
     }
 
     /**
@@ -602,27 +613,28 @@ public class EnhancedStreamTokenizer {
 		v = v / denom;
 	    }
 	    nval = neg ? -v : v;
-	    return ttype = TT_NUMBER;
+            return ttype = TT_NUMBER;
 	}
 
-	if ((ctype & CT_ALPHA) != 0) {
-	    int i = 0;
-	    do {
-		if (i >= buf.length) {
-		    char nb[] = new char[buf.length * 2];
-		    System.arraycopy(buf, 0, nb, 0, buf.length);
-		    buf = nb;
-		}
-		buf[i++] = (char) c;
-		c = read();
-		ctype = c < 0 ? CT_WHITESPACE : c < 256 ? ct[c] : CT_ALPHA;
-	    } while ((ctype & (CT_ALPHA | CT_DIGIT)) != 0);
-	    peekc = c;
-	    sval = String.copyValueOf(buf, 0, i);
-	    if (forceLower)
-		sval = sval.toLowerCase();
-	    return ttype = TT_WORD;
-	}
+        if ((ctype & CT_ALPHA) != 0) {
+            int i = 0;
+            do {
+                if (i >= buf.length) {
+                    char nb[] = new char[buf.length * 2];
+                    System.arraycopy(buf, 0, nb, 0, buf.length);
+                    buf = nb;
+                }
+
+                buf[i++] = (char) c;
+                c = read();
+                ctype = c < 0 ? CT_WHITESPACE : c < 256 ? ct[c] : CT_ALPHA;
+            } while ((ctype & (CT_ALPHA | CT_DIGIT)) != 0);
+
+            peekc = c;
+            sval = String.copyValueOf(buf, 0, i);
+            sval = forceLower ? sval.toLowerCase() : sval;
+            return ttype = TT_WORD;
+        }
 
         if ((ctype & CT_QUOTE) != 0) {
             ttype = c;
@@ -756,7 +768,7 @@ public class EnhancedStreamTokenizer {
 
 	return ttype = c;
     }
-
+    
     /**
      * Causes the next call to the <code>nextToken</code> method of this
      * tokenizer to return the current value in the <code>ttype</code>

@@ -212,7 +212,8 @@ public Object getValueAt(int row, int column)
 				return STARTED_PLUGIN;
 			else if(status == PluginObject.PLUGIN_STOPPED)
 				return STOPPED_PLUGIN;
-		}
+			break;  // Makes static analysis happy
+                }
 		case(2):
 			return plugin.getName();
 		case(3):

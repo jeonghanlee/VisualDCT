@@ -394,7 +394,7 @@ public class DBResolver {
 		tokenizer.whitespaceChars(0, 32);
 		tokenizer.wordChars(33, 255);			// reset
 		tokenizer.eolIsSignificant(true);
-		tokenizer.parseNumbers();
+		tokenizer.parseNumbers(true);
 		tokenizer.quoteChar(DBConstants.quoteChar);
 		tokenizer.whitespaceChars(',', ',');
 		tokenizer.whitespaceChars('{', '{');
@@ -2023,6 +2023,10 @@ public class DBResolver {
 		String include_filename;
 		EnhancedStreamTokenizer inctokenizer = null;
 
+                // treat number values like strings
+		// see issue https://github.com/epics-extensions/VisualDCT/issues/21
+                tokenizer.parseNumbers(false);
+                
 		if (rd!=null)
 
 			/********************** fields area *************************/
@@ -2042,7 +2046,10 @@ public class DBResolver {
 
 						// read field_value
 						tokenizer.nextToken();
-						if (tokenizer.ttype == DBConstants.quoteChar) value=tokenizer.sval;
+						if ((tokenizer.ttype == EnhancedStreamTokenizer.TT_WORD)
+                                                        || (tokenizer.ttype == DBConstants.quoteChar)) {
+							value=tokenizer.sval;
+						}
 						else throw (new DBParseException("Invalid field value...", tokenizer, fileName));
 
 						DBFieldData fd = new DBFieldData(name, value);
@@ -2079,8 +2086,9 @@ public class DBResolver {
 						inctokenizer = getEnhancedStreamTokenizer(file.getAbsolutePath());
 						if (inctokenizer!=null) processFields(dsId, rd, inctokenizer, include_filename, new PathSpecification(file.getParentFile().getAbsolutePath(), paths));
 
-					}	
-
+					}
+                
+                tokenizer.parseNumbers(true);
 		/***********************************************************/
 
 	}
